@@ -1,25 +1,49 @@
 version: '3.9'
 
 services:
-  db:
-    image: postgres:14.1-alpine
-    restart: always
+  # node_app:
+  #   build:
+  #     dockerfile: dockerfile
+  #     context: .
+  #   ports:
+  #     - '3001:3001'
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+  #     redis_data:
+  #       condition: service_healthy
+  redis:
+    image: redis:6.2-rc-alpine
+    env_file:
+      - .env
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning
+    volumes:
+      - redis_data:/var/lib/redis_data/data
+
+  postgres:
+    image: postgres:14
     env_file:
       - .env
     ports:
       - '5432:5432'
+    restart: always
     volumes:
-      - db:/var/lib/postgresql/data
+      - postgres:/var/lib/postgresql/data
 
-  redis_data:
-    image: redis/redis-stack-server:7.2.0-v6
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: always
     ports:
-      - 6379:6379
-    healthcheck:
-      test: ['CMD', 'redis-cli', '--raw', 'incr', 'ping']
+      - '8888:80'
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user-name@domain-name.com
+      PGADMIN_DEFAULT_PASSWORD: strong-password
     volumes:
-      - redis_data:/var/lib/redis_data/data
-
+      - pgadmin-data:/var/lib/pgadmin
 volumes:
-  db:
+  postgres:
   redis_data:
+  pgadmin-data:
