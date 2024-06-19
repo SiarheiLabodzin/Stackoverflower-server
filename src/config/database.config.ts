@@ -8,7 +8,6 @@ export class DatabaseConfig implements TypeOrmOptionsFactory {
 
   createTypeOrmOptions() {
     const database = this.configService.get('postgres');
-    console.log(database);
     return database;
   }
 }

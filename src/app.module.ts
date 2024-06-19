@@ -6,6 +6,9 @@ import { ConfigModule } from '@nestjs/config';
 import { config } from './config/config';
 import { RedisConfigModule } from './redis/redisConfig.module';
 import { TypeOrmConfigModule } from './type-orm/type-ormConfig.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -16,6 +19,9 @@ import { TypeOrmConfigModule } from './type-orm/type-ormConfig.module';
     RedisConfigModule,
     TypeOrmConfigModule,
     TestRedisModule,
+    AuthModule,
+    UsersModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],
