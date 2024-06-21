@@ -5,24 +5,25 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseFilePipe,
   ParseIntPipe,
   Post,
   Query,
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { CookieService } from './cookie.service';
+import { AuthService } from '../services/auth.service';
+import { CookieService } from '../../libs/auth/services/cookies/cookie.service';
 import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 import {
   GetSessionInfoDto,
   OtpSignInBodyDto,
   SignInBodyDto,
   SignUpBodyDto,
-} from './index.dto';
+} from '../index.dto';
 import { Response } from 'express';
-import { SessionInfo } from './sessionInfo.decorator';
-import { AuthGuard } from './authToken.guard';
+import { SessionInfo } from '../../libs/auth/decorators/sessionInfo.decorator';
+import { AuthGuard } from '../../libs/auth/guards/authToken.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -54,13 +55,12 @@ export class AuthController {
   @Get('email/confirm/:id')
   @ApiOkResponse()
   async confirmationEmail(
-    @Param('id', ParseIntPipe) id: string,
-    @Query('email') email: string,
+    @Param('id', ParseFilePipe) id: number,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const { Token } = await this.authService.confirmationEmail(id, email);
+    const { token } = await this.authService.confirmationEmail(id);
 
-    this.cookieService.setToken(res, Token);
+    this.cookieService.setToken(res, token);
   }
 
   @Post('sign-in/otp')
@@ -69,9 +69,9 @@ export class AuthController {
     @Body() body: OtpSignInBodyDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const { Token } = await this.authService.confirmationSignIn(body.otp);
+    const { token } = await this.authService.confirmationSignIn(body.otp);
 
-    this.cookieService.setToken(res, Token);
+    this.cookieService.setToken(res, token);
   }
 
   @Get('session-info')

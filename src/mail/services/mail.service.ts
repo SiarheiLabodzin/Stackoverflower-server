@@ -8,7 +8,7 @@ export class MailService {
   sendMail(mail: string, subject: string, text: string): void {
     this.mailerService.sendMail({
       to: mail,
-      from: 'siarhei.labodzin@innowise.com',
+      from: process.env.MAILER_AUTHOR,
       subject: subject,
       text: text,
       html: `<b>${text}</b>`,

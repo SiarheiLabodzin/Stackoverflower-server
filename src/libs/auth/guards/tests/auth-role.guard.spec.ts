@@ -1,4 +1,5 @@
-import { AuthRoleGuard } from './auth-role.guard';
+import { Reflector } from '@nestjs/core';
+import { AuthRoleGuard } from '../auth-role.guard';
 
 describe('AuthRoleGuard', () => {
   it('should be defined', () => {

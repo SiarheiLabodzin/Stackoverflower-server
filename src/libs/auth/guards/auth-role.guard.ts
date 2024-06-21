@@ -1,29 +1,23 @@
-import { JwtService } from '@nestjs/jwt';
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Roles } from './roles.decorator';
+import { Roles } from '../decorators/roles.decorator';
 import { Request } from 'express';
-import { CookieService } from './cookie.service';
-import { GetSessionInfoDto } from './index.dto';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/users/services/users.service';
 
 @Injectable()
 export class AuthRoleGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
-    private jwtService: JwtService,
     private usersService: UsersService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const roles = this.reflector.get(Roles, context.getHandler());
     const request = context.switchToHttp().getRequest() as Request;
+    const session = await request['session'];
 
-    if (request?.cookies) {
-      const token = request.cookies[CookieService.tokenAccessKey];
-      const decodedJwtAccessToken: GetSessionInfoDto =
-        this.jwtService.decode(token);
-      const email = decodedJwtAccessToken.email;
+    if (request['session']) {
+      const { email } = session;
       const user = await this.usersService.findByEmail(email);
       return roles.includes(user?.role || '');
     }

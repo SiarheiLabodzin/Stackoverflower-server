@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { CookieService } from './cookie.service';
+import { CookieService } from '../services/cookies/cookie.service';
 import { Request } from 'express';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class AuthGuard implements CanActivate {
 
     try {
       const sessionInformation = this.jwtService.verifyAsync(token, {
-        secret: `${process.env.JWT_SECRET}`,
+        secret: process.env.JWT_SECRET,
       });
       req['session'] = sessionInformation;
     } catch {

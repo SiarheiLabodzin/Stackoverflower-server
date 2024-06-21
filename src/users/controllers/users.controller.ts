@@ -9,10 +9,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger';
-import { UsersService } from './users.service';
+import { UsersService } from '../services/users.service';
 import { UpdateBodyDto } from 'src/auth/index.dto';
-import { Roles } from 'src/auth/roles.decorator';
-import { AuthRoleGuard } from 'src/auth/auth-role.guard';
+import { Roles } from 'src/libs/auth/decorators/roles.decorator';
+import { AuthRoleGuard } from 'src/libs/auth/guards/auth-role.guard';
+import { AuthGuard } from 'src/libs/auth/guards/authToken.guard';
 
 @Controller('users')
 export class UsersController {
@@ -21,7 +22,7 @@ export class UsersController {
   @Get('get-all-users')
   @ApiOkResponse()
   @Roles(['user'])
-  @UseGuards(AuthRoleGuard)
+  @UseGuards(AuthGuard, AuthRoleGuard)
   async getAllUsers() {
     return await this.usersService.findAllUsers();
   }
