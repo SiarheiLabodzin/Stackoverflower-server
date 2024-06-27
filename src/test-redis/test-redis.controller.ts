@@ -9,7 +9,7 @@ export class TestRedisController {
   @Get()
   async getHello() {
     await this.redis.set('key2', 'Redis wow2 data!');
-    const redisData = await this.redis.get('key');
+    const redisData = await this.redis.get('key2');
     return { redisData };
   }
 }

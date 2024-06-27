@@ -1,30 +1,20 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { RedisModule } from '@nestjs-modules/ioredis';
 import { TestRedisModule } from './test-redis/test-redis.module';
+import { ConfigModule } from '@nestjs/config';
+import { config } from './config/config';
+import { RedisConfigModule } from './redis/redisConfig.module';
+import { TypeOrmConfigModule } from './type-orm/type-ormConfig.module';
 
 @Module({
   imports: [
-    RedisModule.forRoot({
-      type: 'single',
-      url: process.env.REDIS_URL,
-      options: {
-        password: process.env.REDIS_PASSWORD,
-        port: 6379,
-      },
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [config],
     }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: '11012346QWERty',
-      database: 'test',
-      entities: [],
-      synchronize: true,
-    }),
+    RedisConfigModule,
+    TypeOrmConfigModule,
     TestRedisModule,
   ],
   controllers: [AppController],
