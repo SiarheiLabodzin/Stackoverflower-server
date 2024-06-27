@@ -2,7 +2,7 @@ import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Roles } from '../decorators/roles.decorator';
 import { Request } from 'express';
-import { UsersService } from 'src/users/services/users.service';
+import { UsersService } from '../../../users/services/users.service';
 
 @Injectable()
 export class AuthRoleGuard implements CanActivate {
@@ -21,7 +21,6 @@ export class AuthRoleGuard implements CanActivate {
       const user = await this.usersService.findByEmail(email);
       return roles.includes(user?.role || '');
     }
-
     return false;
   }
 }

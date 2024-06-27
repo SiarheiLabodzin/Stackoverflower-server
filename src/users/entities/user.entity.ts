@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Question } from './question.entity';
-import { Answer } from './answer.entity';
+import { Question } from '../../type-orm/entities/question.entity';
+import { Answer } from '../../type-orm/entities/answer.entity';
 
 export enum UserRole {
   ADMIN = 'admin',

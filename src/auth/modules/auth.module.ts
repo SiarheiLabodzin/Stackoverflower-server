@@ -7,7 +7,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MailModule } from 'src/mail/modules/mail.module';
 import { UsersModule } from 'src/users/modules/users.module';
-import { User } from 'src/type-orm/entities/user.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Module({
   imports: [

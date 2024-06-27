@@ -9,9 +9,9 @@ import { InjectRedis } from '@nestjs-modules/ioredis';
 import { Redis } from 'ioredis';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { MailService } from 'src/mail/services/mail.service';
-import { UsersService } from 'src/users/services/users.service';
-import { User } from 'src/type-orm/entities/user.entity';
+import { MailService } from '../../mail/services/mail.service';
+import { UsersService } from '../../users/services/users.service';
+import { User } from '../../users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
