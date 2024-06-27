@@ -3,10 +3,12 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from '../../../modules/users/entities/user.entity';
+import { Answer } from './answer.entity';
 
 @Entity()
 export class Question {
@@ -16,7 +18,14 @@ export class Question {
   @ManyToOne(() => User, (user) => user.questions)
   user: User;
 
-  @Column()
+  @OneToMany(() => Answer, (answer) => answer.question, {
+    cascade: true,
+  })
+  answers: Answer[];
+
+  @Column({
+    default: 0,
+  })
   rating: number;
 
   @Column()
