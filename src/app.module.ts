@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { TestRedisModule } from './test-redis/test-redis.module';
+import { TestRedisModule } from './modules/test-redis/test-redis.module';
 import { ConfigModule } from '@nestjs/config';
 import { config } from './config/config';
 import { RedisConfigModule } from './config/redis/redisConfig.module';
