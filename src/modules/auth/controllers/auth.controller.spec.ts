@@ -3,8 +3,8 @@ import { AuthController } from './auth.controller';
 import { AuthService } from '../services/auth.service';
 import { MockAuthController } from '../mocks/mockAuthRepository';
 import { JwtService } from '@nestjs/jwt';
-import { CookieService } from '../../libs/auth/services/cookies/cookie.service';
 import { response } from 'express';
+import { CookieService } from '../services/cookies/cookie.service';
 
 describe('AuthController', () => {
   let controller: AuthController;

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UpdateBodyDto } from 'src/auth/index.dto';
+import { UpdateBodyDto } from 'src/modules/auth/index.dto';
 import { User } from '../entities/user.entity';
 import { Repository } from 'typeorm';
 

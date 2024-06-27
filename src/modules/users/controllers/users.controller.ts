@@ -10,10 +10,10 @@ import {
 } from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger';
 import { UsersService } from '../services/users.service';
-import { UpdateBodyDto } from '../../auth/index.dto';
-import { Roles } from '../../libs/auth/decorators/roles.decorator';
-import { AuthRoleGuard } from '../../libs/auth/guards/auth-role.guard';
-import { AuthGuard } from '../../libs/auth/guards/authToken.guard';
+import { Roles } from '../../../libs/auth/decorators/roles.decorator';
+import { AuthGuard } from '../../../libs/auth/guards/authToken.guard';
+import { AuthRoleGuard } from '../../../libs/auth/guards/auth-role.guard';
+import { UpdateBodyDto } from '../../../modules/auth/index.dto';
 
 @Controller('users')
 export class UsersController {

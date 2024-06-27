@@ -1,8 +1,8 @@
 import { AuthRoleGuard } from '../auth-role.guard';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Reflector } from '@nestjs/core';
-import { UsersService } from '../../../../users/services/users.service';
 import { mockRoleGuard } from '../mocks/mockGuards';
+import { UsersService } from '../../../../modules/users/services/users.service';
 
 describe('AuthRoleGuard', () => {
   let authRoleGuard: AuthRoleGuard;

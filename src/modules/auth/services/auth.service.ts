@@ -3,15 +3,15 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { PasswordService } from '../../libs/auth/services/password/password.service';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import { Redis } from 'ioredis';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MailService } from '../../mail/services/mail.service';
-import { UsersService } from '../../users/services/users.service';
-import { User } from '../../users/entities/user.entity';
+import { UsersService } from '../../../modules/users/services/users.service';
+import { User } from '../../../modules/users/entities/user.entity';
+import { PasswordService } from './password/password.service';
 
 @Injectable()
 export class AuthService {
