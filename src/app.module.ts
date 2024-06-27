@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TestRedisModule } from './test-redis/test-redis.module';
 import { ConfigModule } from '@nestjs/config';
 import { config } from './config/config';
 import { RedisConfigModule } from './redis/redisConfig.module';
 import { TypeOrmConfigModule } from './type-orm/type-ormConfig.module';
+import { AuthModule } from './auth/modules/auth.module';
+import { UsersModule } from './users/modules/users.module';
+import { MailModule } from './mail/modules/mail.module';
 
 @Module({
   imports: [
@@ -16,8 +17,11 @@ import { TypeOrmConfigModule } from './type-orm/type-ormConfig.module';
     RedisConfigModule,
     TypeOrmConfigModule,
     TestRedisModule,
+    AuthModule,
+    UsersModule,
+    MailModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

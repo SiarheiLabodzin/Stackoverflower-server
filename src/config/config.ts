@@ -1,3 +1,7 @@
+import { Answer } from 'src/type-orm/entities/answer.entity';
+import { Question } from 'src/type-orm/entities/question.entity';
+import { User } from 'src/users/entities/user.entity';
+
 export const config = () => ({
   redis: {
     type: 'single',
@@ -13,7 +17,19 @@ export const config = () => ({
     username: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
     database: process.env.POSTGRES_DB,
-    entities: [],
+    entities: [User, Question, Answer],
     synchronize: true,
+  },
+  mailer: {
+    transport: {
+      host: process.env.MAILER_HOST,
+      auth: {
+        user: process.env.MAILER_USER,
+        pass: process.env.MAILER_PASS,
+      },
+      tls: {
+        rejectUnauthorized: false,
+      },
+    },
   },
 });

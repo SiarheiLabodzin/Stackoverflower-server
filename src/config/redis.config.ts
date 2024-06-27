@@ -8,7 +8,6 @@ export class RedisConfig implements RedisModuleOptionsFactory {
 
   async createRedisModuleOptions() {
     const redis = await this.configService.get('redis');
-    console.log(redis);
     return await redis;
   }
 }
