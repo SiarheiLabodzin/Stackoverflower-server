@@ -1,6 +1,6 @@
-import { Answer } from 'src/type-orm/entities/answer.entity';
-import { Question } from 'src/type-orm/entities/question.entity';
-import { User } from 'src/users/entities/user.entity';
+import { Answer } from 'src/config/type-orm/entities/answer.entity';
+import { Question } from 'src/config/type-orm/entities/question.entity';
+import { User } from '../modules/users/entities/user.entity';
 
 export const config = () => ({
   redis: {

@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { TestRedisModule } from './test-redis/test-redis.module';
 import { ConfigModule } from '@nestjs/config';
 import { config } from './config/config';
-import { RedisConfigModule } from './redis/redisConfig.module';
-import { TypeOrmConfigModule } from './type-orm/type-ormConfig.module';
-import { AuthModule } from './auth/modules/auth.module';
-import { UsersModule } from './users/modules/users.module';
-import { MailModule } from './mail/modules/mail.module';
+import { RedisConfigModule } from './config/redis/redisConfig.module';
+import { TypeOrmConfigModule } from './config/type-orm/type-ormConfig.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { MailModule } from './modules/mail/mail.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [

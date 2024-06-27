@@ -11,7 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
-import { CookieService } from '../../libs/auth/services/cookies/cookie.service';
+import { CookieService } from '../services/cookies/cookie.service';
 import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 import {
   GetSessionInfoDto,
@@ -20,8 +20,8 @@ import {
   SignUpBodyDto,
 } from '../index.dto';
 import { Response } from 'express';
-import { SessionInfo } from '../../libs/auth/decorators/sessionInfo.decorator';
-import { AuthGuard } from '../../libs/auth/guards/authToken.guard';
+import { SessionInfo } from '../../../libs/auth/decorators/sessionInfo.decorator';
+import { AuthGuard } from '../../../libs/auth/guards/authToken.guard';
 
 @Controller('auth')
 export class AuthController {

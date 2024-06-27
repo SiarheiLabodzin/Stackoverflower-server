@@ -1,4 +1,4 @@
-import { users } from '../../../../users/mocks/mockUsersRepository';
+import { users } from '../../../../modules/users/mocks/mockUsersRepository';
 
 export const roles = ['user'];
 

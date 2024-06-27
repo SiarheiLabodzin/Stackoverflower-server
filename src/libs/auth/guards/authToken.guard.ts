@@ -5,8 +5,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { CookieService } from '../services/cookies/cookie.service';
 import { Request } from 'express';
+import { CookieService } from '../../../modules/auth/services/cookies/cookie.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
