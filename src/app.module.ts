@@ -14,6 +14,7 @@ import { AnswersModule } from './modules/answers/answers.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: '.env',
       load: [config],
     }),
     RedisConfigModule,
