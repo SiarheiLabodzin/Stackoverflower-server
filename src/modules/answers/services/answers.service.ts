@@ -4,55 +4,57 @@ import { Answer } from 'src/config/type-orm/entities/answer.entity';
 import { Question } from 'src/config/type-orm/entities/question.entity';
 import { User } from 'src/modules/users/entities/user.entity';
 import { DeepPartial, Repository } from 'typeorm';
-import { UpdateAnswerDto } from '../dtos/updateAnswer.dto';
+
+import {
+  CreateAnswerInterface,
+  DeleteUserAnswerInterface,
+  UpdateAnswerInterface,
+  UpdateUserAnswerInterface,
+} from './types/types';
+import { UsersService } from 'src/modules/users/services/users.service';
 
 @Injectable()
 export class AnswersService {
   constructor(
-    @InjectRepository(Question) private repoQuestion: Repository<Question>,
-    @InjectRepository(User) private repoUser: Repository<User>,
-    @InjectRepository(Answer) private repoAnswer: Repository<Answer>,
+    @InjectRepository(Question) private questionRepo: Repository<Question>,
+    private userRepo: UsersService,
+    @InjectRepository(Answer) private answerRepo: Repository<Answer>,
   ) {}
 
   async getAllAnswers() {
-    return await this.repoAnswer.find({
-      relations: ['user', 'question'],
-    });
+    return await this.answerRepo.find({});
   }
 
   async findById(id: number) {
-    return await this.repoAnswer.findOne({
+    return await this.answerRepo.findOne({
       where: {
         id: id,
       },
-      relations: ['user', 'question'],
     });
   }
 
-  async createAnswer(author: string, text: string, id: number) {
-    const user = await this.repoUser.findOne({
-      where: { email: author },
-    });
+  async createAnswer({ email, text, id }: CreateAnswerInterface) {
+    const user = await this.userRepo.findByEmail(email);
 
-    const question = await this.repoQuestion.findOne({
+    const question = await this.questionRepo.findOne({
       where: {
         id: id,
       },
       relations: ['user', 'answers'],
     });
 
-    const answer = this.repoAnswer.create({
-      author: author,
+    const answer = this.answerRepo.create({
+      author: email,
       text: text,
       user: user as DeepPartial<User>,
       question: question as DeepPartial<Question>,
     });
 
-    return await this.repoAnswer.save(answer);
+    return await this.answerRepo.save(answer);
   }
 
-  async updateAnswer(id: number, bodyAnswer: UpdateAnswerDto) {
-    const answer = await this.repoAnswer.findOne({
+  async updateAnswer({ id, text }: UpdateAnswerInterface) {
+    const answer = await this.answerRepo.findOne({
       where: {
         id: id,
       },
@@ -62,36 +64,35 @@ export class AnswersService {
       throw new NotFoundException('Answer not found!');
     }
 
-    Object.assign(answer, bodyAnswer);
+    Object.assign(answer, text);
 
-    return await this.repoAnswer.save(answer);
+    return await this.answerRepo.update(id, answer);
   }
 
-  async updateUserAnswer(
-    email: string,
-    id: number,
-    bodyAnswer: UpdateAnswerDto,
-  ) {
-    const user = await this.repoUser.findOne({
-      relations: ['questions', 'answers'],
+  async updateUserAnswer({ email, id, text }: UpdateUserAnswerInterface) {
+    const user = await this.userRepo.findByEmail(email);
+
+    if (!user) {
+      throw new NotFoundException('User not found!');
+    }
+
+    const userAnswer = await this.answerRepo.findOne({
       where: {
-        email: email,
+        id: id,
       },
     });
-
-    const [userAnswer] = user?.answers.filter((el) => el.id === id) as Answer[];
 
     if (!userAnswer) {
       throw new NotFoundException('Answer not found!');
     }
 
-    Object.assign(userAnswer, bodyAnswer);
+    Object.assign(userAnswer, text);
 
-    return await this.repoAnswer.save(userAnswer);
+    return await this.answerRepo.update(id, userAnswer);
   }
 
   async upvoteAnswer(id: number) {
-    const answer = await this.repoAnswer.findOne({
+    const answer = await this.answerRepo.findOne({
       where: {
         id: id,
       },
@@ -103,11 +104,11 @@ export class AnswersService {
 
     answer.rating++;
 
-    return await this.repoAnswer.save(answer);
+    return await this.answerRepo.save(answer);
   }
 
   async downvoteAnswer(id: number) {
-    const answer = await this.repoAnswer.findOne({
+    const answer = await this.answerRepo.findOne({
       where: {
         id: id,
       },
@@ -119,11 +120,11 @@ export class AnswersService {
 
     answer.rating--;
 
-    return await this.repoAnswer.save(answer);
+    return await this.answerRepo.save(answer);
   }
 
   async deleteAnswer(id: number) {
-    const answer = await this.repoAnswer.findOne({
+    const answer = await this.answerRepo.findOne({
       where: {
         id: id,
       },
@@ -133,23 +134,26 @@ export class AnswersService {
       throw new NotFoundException('Answer not found!');
     }
 
-    return await this.repoAnswer.remove(answer);
+    return await this.answerRepo.delete(id);
   }
 
-  async deleteUserAnswer(id: number, email: string) {
-    const user = await this.repoUser.findOne({
-      relations: ['questions', 'answers'],
+  async deleteUserAnswer({ id, email }: DeleteUserAnswerInterface) {
+    const user = await this.userRepo.findByEmail(email);
+
+    if (!user) {
+      throw new NotFoundException('User not found!');
+    }
+
+    const userAnswer = await this.answerRepo.findOne({
       where: {
-        email: email,
+        id: id,
       },
     });
-
-    const [userAnswer] = user?.answers.filter((el) => el.id === id) as Answer[];
 
     if (!userAnswer) {
       throw new NotFoundException('Answer not found!');
     }
 
-    return await this.repoAnswer.remove(userAnswer);
+    return await this.answerRepo.delete(id);
   }
 }

@@ -5,18 +5,17 @@ import { User } from 'src/modules/users/entities/user.entity';
 import { DeepPartial, Repository } from 'typeorm';
 import { UpdateQuestionDto } from '../dtos/updateQuestion.dto';
 import { QuestionQueryDto } from '../dtos/questionQuery.dto';
+import { UsersService } from 'src/modules/users/services/users.service';
 
 @Injectable()
 export class QuestionsService {
   constructor(
     @InjectRepository(Question) private repoQuestion: Repository<Question>,
-    @InjectRepository(User) private repoUser: Repository<User>,
+    private repoUser: UsersService,
   ) {}
 
   async getAllQuestions() {
-    return await this.repoQuestion.find({
-      relations: ['user', 'answers'],
-    });
+    return await this.repoQuestion.find({});
   }
 
   async findById(id: number) {
@@ -24,7 +23,6 @@ export class QuestionsService {
       where: {
         id: id,
       },
-      relations: ['user', 'answers'],
     });
   }
 
@@ -33,19 +31,15 @@ export class QuestionsService {
     const questions = this.repoQuestion.createQueryBuilder('question');
 
     if (tags) {
-      questions
-        .andWhere('LOWER(question.tags) LIKE LOWER(:tags)', {
-          tags: `%${tags}%`,
-        })
-        .leftJoinAndSelect('question.user', 'user')
-        .leftJoinAndSelect('question.answers', 'answer')
-        .orderBy('question.id', 'DESC');
-    } else {
-      questions
-        .leftJoinAndSelect('question.user', 'user')
-        .leftJoinAndSelect('question.answers', 'answer')
-        .orderBy('question.id', 'DESC');
+      questions.andWhere('LOWER(question.tags) LIKE LOWER(:tags)', {
+        tags: `%${tags}%`,
+      });
     }
+
+    questions
+      .leftJoinAndSelect('question.user', 'user')
+      .leftJoinAndSelect('question.answers', 'answer')
+      .orderBy('question.id', 'DESC');
 
     return await questions.getMany();
   }
@@ -56,9 +50,7 @@ export class QuestionsService {
     description: string,
     tags: string,
   ) {
-    const user = await this.repoUser.findOne({
-      where: { email: author },
-    });
+    const user = await this.repoUser.findByEmail(author);
     const question = this.repoQuestion.create({
       author: author,
       title: title,
@@ -83,7 +75,7 @@ export class QuestionsService {
 
     Object.assign(question, bodyQuestion);
 
-    return await this.repoQuestion.save(question);
+    return await this.repoQuestion.update(id, question);
   }
 
   async updateUserQuestion(
@@ -91,16 +83,17 @@ export class QuestionsService {
     id: number,
     bodyQuestion: UpdateQuestionDto,
   ) {
-    const user = await this.repoUser.findOne({
-      relations: ['questions', 'answers'],
+    const user = await this.repoUser.findByEmail(email);
+
+    if (!user) {
+      throw new NotFoundException('User not found!');
+    }
+
+    const userQuestion = await this.repoQuestion.findOne({
       where: {
-        email: email,
+        id: id,
       },
     });
-
-    const [userQuestion] = user?.questions.filter(
-      (el) => el.id === id,
-    ) as Question[];
 
     if (!userQuestion) {
       throw new NotFoundException('Question not found!');
@@ -108,7 +101,7 @@ export class QuestionsService {
 
     Object.assign(userQuestion, bodyQuestion);
 
-    return await this.repoQuestion.save(userQuestion);
+    return await this.repoQuestion.update(id, userQuestion);
   }
 
   async upvoteQuestion(id: number) {
@@ -154,25 +147,26 @@ export class QuestionsService {
       throw new NotFoundException('Question not found!');
     }
 
-    return await this.repoQuestion.remove(question);
+    return await this.repoQuestion.delete(id);
   }
 
   async deleteUserQuestion(id: number, email: string) {
-    const user = await this.repoUser.findOne({
-      relations: ['questions', 'answers'],
+    const user = await this.repoUser.findByEmail(email);
+
+    if (!user) {
+      throw new NotFoundException('User not found!');
+    }
+
+    const userQuestion = await this.repoQuestion.findOne({
       where: {
-        email: email,
+        id: id,
       },
     });
-
-    const [userQuestion] = user?.questions.filter(
-      (el) => el.id === id,
-    ) as Question[];
 
     if (!userQuestion) {
       throw new NotFoundException('Question not found!');
     }
 
-    return await this.repoQuestion.remove(userQuestion);
+    return await this.repoQuestion.delete(id);
   }
 }

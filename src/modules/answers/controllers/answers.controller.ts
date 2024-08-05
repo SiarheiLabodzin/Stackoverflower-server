@@ -45,8 +45,9 @@ export class AnswersController {
     @SessionInfo() session: GetSessionInfoDto,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    const userMail = session.email;
-    return this.answersService.createAnswer(userMail, body.text, id);
+    const { text } = body;
+    const { email } = session;
+    return this.answersService.createAnswer({ email, text, id });
   }
 
   @Patch('update-answer/:id')
@@ -57,7 +58,9 @@ export class AnswersController {
     @Body() body: UpdateAnswerDto,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    return await this.answersService.updateAnswer(id, body);
+    const { text } = body;
+
+    return await this.answersService.updateAnswer({ id, text });
   }
 
   @Patch('update-user-answer/:id')
@@ -69,7 +72,10 @@ export class AnswersController {
     @Param('id', ParseIntPipe) id: number,
     @SessionInfo() session: GetSessionInfoDto,
   ) {
-    return await this.answersService.updateUserAnswer(session.email, id, body);
+    const { text } = body;
+    const { email } = session;
+
+    return await this.answersService.updateUserAnswer({ email, id, text });
   }
 
   @Patch('upvote-answer/:id')
@@ -100,6 +106,7 @@ export class AnswersController {
     @Param('id', ParseIntPipe) id: number,
     @SessionInfo() session: GetSessionInfoDto,
   ) {
-    return await this.answersService.deleteUserAnswer(id, session.email);
+    const { email } = session;
+    await this.answersService.deleteUserAnswer({ id, email });
   }
 }
