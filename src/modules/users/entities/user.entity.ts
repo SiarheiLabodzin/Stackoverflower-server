@@ -35,9 +35,13 @@ export class User {
   })
   role: UserRole;
 
-  @OneToMany(() => Question, (question) => question.user)
+  @OneToMany(() => Question, (question) => question.user, {
+    cascade: true,
+  })
   questions: Question[];
 
-  @OneToMany(() => Answer, (answer) => answer.user)
+  @OneToMany(() => Answer, (answer) => answer.user, {
+    cascade: true,
+  })
   answers: Answer[];
 }

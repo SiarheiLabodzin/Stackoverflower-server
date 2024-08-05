@@ -18,6 +18,10 @@ export class UsersService {
     return await this.repo.save(user);
   }
 
+  findRelationUser() {
+    return this.repo.find({ relations: ['questions'] });
+  }
+
   async findByEmail(email: string) {
     return await this.repo.findOne({
       where: { email },

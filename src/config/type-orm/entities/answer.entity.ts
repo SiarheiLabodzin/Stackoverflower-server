@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Question } from './question.entity';
 
 @Entity()
 export class Answer {
@@ -16,7 +17,9 @@ export class Answer {
   @ManyToOne(() => User, (user) => user.answers)
   user: User;
 
-  @Column()
+  @Column({
+    default: 0,
+  })
   rating: number;
 
   @Column()
@@ -24,6 +27,9 @@ export class Answer {
 
   @Column()
   text: string;
+
+  @ManyToOne(() => Question, (question) => question.answers)
+  question: Question;
 
   @CreateDateColumn({
     type: 'timestamp',

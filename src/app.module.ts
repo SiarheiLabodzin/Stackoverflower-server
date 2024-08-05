@@ -7,6 +7,8 @@ import { TypeOrmConfigModule } from './config/type-orm/type-ormConfig.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { MailModule } from './modules/mail/mail.module';
 import { UsersModule } from './modules/users/users.module';
+import { QuestionsModule } from './modules/questions/questions.module';
+import { AnswersModule } from './modules/answers/answers.module';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { UsersModule } from './modules/users/users.module';
     AuthModule,
     UsersModule,
     MailModule,
+    QuestionsModule,
+    AnswersModule,
   ],
   controllers: [],
   providers: [],
