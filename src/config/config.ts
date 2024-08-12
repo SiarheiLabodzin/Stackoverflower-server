@@ -1,5 +1,6 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 
+// changed all config rows
 export const config = () => ({
   redis: {
     type: 'single',
