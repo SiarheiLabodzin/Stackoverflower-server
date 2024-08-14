@@ -35,7 +35,7 @@ export const userDto = {
 };
 
 export const updateBody = {
-  email: 'wow@gmail.com',
+  email: 'wowgmail.com',
   questions: [],
   answers: [],
 };
