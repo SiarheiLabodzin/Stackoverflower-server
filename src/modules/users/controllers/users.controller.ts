@@ -27,6 +27,11 @@ export class UsersController {
     return await this.usersService.findAllUsers();
   }
 
+  @Get('get-user-with-relation')
+  findRelationUser() {
+    return this.usersService.findRelationUser();
+  }
+
   @Patch('update-user/:id')
   @ApiOkResponse()
   async updateUser(
