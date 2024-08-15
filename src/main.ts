@@ -6,6 +6,11 @@ import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
+import {
+  ClientProxy,
+  ClientProxyFactory,
+  Transport,
+} from '@nestjs/microservices';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -20,6 +25,7 @@ async function bootstrap() {
       ],
     }),
   });
+
   const config = new DocumentBuilder()
     .setTitle('Stackoverflower')
     .setDescription('Stackoverflower API')
@@ -27,6 +33,20 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
 
   SwaggerModule.setup('api', app, document);
+
+  const microserviceClient: ClientProxy = ClientProxyFactory.create({
+    transport: Transport.RMQ,
+    options: {
+      urls: [process.env.RABBITMQ_URLS],
+      queue: process.env.RABBITMQ_QUEUE,
+      queueOptions: {
+        durable: false,
+      },
+      socketOptions: {
+        heartbeatIntervalInSeconds: 60,
+      },
+    },
+  });
 
   app.use(cookieParser());
   app.useGlobalPipes(new ValidationPipe());
