@@ -21,5 +21,8 @@ declare namespace NodeJS {
     MAILER_USER: string;
     MAILER_PASS: string;
     MAILER_AUTHOR: string;
+
+    RABBITMQ_URLS: string;
+    RABBITMQ_QUEUE: string;
   }
 }
