@@ -10,11 +10,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
-import { AuthGuard } from 'src/libs/auth/guards/authToken.guard';
-import { GetSessionInfoDto } from 'src/modules/auth/index.dto';
-import { SessionInfo } from 'src/libs/auth/decorators/sessionInfo.decorator';
-import { AuthRoleGuard } from 'src/libs/auth/guards/auth-role.guard';
-import { Roles } from 'src/libs/auth/decorators/roles.decorator';
+import { AuthGuard } from '@src/libs/auth/guards/authToken.guard';
+import { GetSessionInfoDto } from '@src/modules/auth/index.dto';
+import { SessionInfo } from '@src/libs/auth/decorators/sessionInfo.decorator';
+import { AuthRoleGuard } from '@src/libs/auth/guards/auth-role.guard';
+import { Roles } from '@src/libs/auth/decorators/roles.decorator';
 import { AnswersService } from '../services/answers.service';
 import { CreateAnswerDto } from '../dtos/createAnswer.dto';
 import { UpdateAnswerDto } from '../dtos/updateAnswer.dto';
