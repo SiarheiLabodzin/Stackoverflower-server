@@ -25,7 +25,6 @@ async function bootstrap() {
       ],
     }),
   });
-
   const config = new DocumentBuilder()
     .setTitle('Stackoverflower')
     .setDescription('Stackoverflower API')
