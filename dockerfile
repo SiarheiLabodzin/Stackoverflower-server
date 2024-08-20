@@ -8,6 +8,10 @@ RUN npm install
 
 COPY . .
 
+COPY .env .env
+
+RUN export $(grep -v '^#' .env | xargs)
+
 RUN npm run build
 
 EXPOSE 3000
