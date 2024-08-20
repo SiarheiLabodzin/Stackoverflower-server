@@ -8,8 +8,6 @@ RUN npm install --only=production
 
 COPY . .
 
-COPY .env .env
-
 RUN npm run build
 
 WORKDIR /app/dist
