@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Answer } from 'src/config/type-orm/entities/answer.entity';
-import { Question } from 'src/config/type-orm/entities/question.entity';
-import { User } from 'src/modules/users/entities/user.entity';
+import { Answer } from '@src/config/type-orm/entities/answer.entity';
+import { Question } from '@src/config/type-orm/entities/question.entity';
+import { User } from '@src/modules/users/entities/user.entity';
 import { DeepPartial, Repository } from 'typeorm';
 
 import {
@@ -11,7 +11,7 @@ import {
   UpdateAnswerInterface,
   UpdateUserAnswerInterface,
 } from './types/types';
-import { UsersService } from 'src/modules/users/services/users.service';
+import { UsersService } from '@src/modules/users/services/users.service';
 
 @Injectable()
 export class AnswersService {

@@ -17,6 +17,7 @@ import { AnswersModule } from './modules/answers/answers.module';
       envFilePath: '.env',
       load: [config],
     }),
+
     RedisConfigModule,
     TypeOrmConfigModule,
     TestRedisModule,

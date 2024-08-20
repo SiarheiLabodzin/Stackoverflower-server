@@ -11,15 +11,18 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
-import { AuthGuard } from 'src/libs/auth/guards/authToken.guard';
+import { AuthGuard } from '@src/libs/auth/guards/authToken.guard';
 import { QuestionsService } from '../services/questions.service';
-import { GetSessionInfoDto, QusetionItemDto } from 'src/modules/auth/index.dto';
-import { SessionInfo } from 'src/libs/auth/decorators/sessionInfo.decorator';
+import {
+  GetSessionInfoDto,
+  QusetionItemDto,
+} from '@src/modules/auth/index.dto';
+import { SessionInfo } from '@src/libs/auth/decorators/sessionInfo.decorator';
 import { CreateQuestionDto } from '../dtos/createQuestion.dto';
 import { UpdateQuestionDto } from '../dtos/updateQuestion.dto';
 import { QuestionQueryDto } from '../dtos/questionQuery.dto';
-import { AuthRoleGuard } from 'src/libs/auth/guards/auth-role.guard';
-import { Roles } from 'src/libs/auth/decorators/roles.decorator';
+import { AuthRoleGuard } from '@src/libs/auth/guards/auth-role.guard';
+import { Roles } from '@src/libs/auth/decorators/roles.decorator';
 
 @Controller('questions')
 export class QuestionsController {

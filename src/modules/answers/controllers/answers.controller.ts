@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Inject,
   Param,
   ParseIntPipe,
   Patch,
@@ -10,18 +11,23 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
-import { AuthGuard } from 'src/libs/auth/guards/authToken.guard';
-import { GetSessionInfoDto } from 'src/modules/auth/index.dto';
-import { SessionInfo } from 'src/libs/auth/decorators/sessionInfo.decorator';
-import { AuthRoleGuard } from 'src/libs/auth/guards/auth-role.guard';
-import { Roles } from 'src/libs/auth/decorators/roles.decorator';
+import { AuthGuard } from '@src/libs/auth/guards/authToken.guard';
+import { GetSessionInfoDto } from '@src/modules/auth/index.dto';
+import { SessionInfo } from '@src/libs/auth/decorators/sessionInfo.decorator';
+import { AuthRoleGuard } from '@src/libs/auth/guards/auth-role.guard';
+import { Roles } from '@src/libs/auth/decorators/roles.decorator';
 import { AnswersService } from '../services/answers.service';
 import { CreateAnswerDto } from '../dtos/createAnswer.dto';
 import { UpdateAnswerDto } from '../dtos/updateAnswer.dto';
+import { Observable } from 'rxjs';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Controller('answers')
 export class AnswersController {
-  constructor(private answersService: AnswersService) {}
+  constructor(
+    private answersService: AnswersService,
+    @Inject('MICROSERVICE_CLIENT') private client: ClientProxy,
+  ) {}
 
   @Get('get-all-answers')
   @ApiOkResponse()
@@ -35,6 +41,13 @@ export class AnswersController {
   @UseGuards(AuthGuard)
   async findById(@Param('id', ParseIntPipe) id: number) {
     return this.answersService.findById(id);
+  }
+
+  @Get('sum')
+  sum(): Observable<number> {
+    const pattern = { cmd: 'sum' };
+    const payload = [1, 2, 3, 4, 5];
+    return this.client.send<number>(pattern, payload);
   }
 
   @Post('create-answer/:id')

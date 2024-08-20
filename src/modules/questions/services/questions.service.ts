@@ -1,14 +1,16 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Question } from 'src/config/type-orm/entities/question.entity';
-import { User } from 'src/modules/users/entities/user.entity';
+import { Question } from '@src/config/type-orm/entities/question.entity';
+import { User } from '@src/modules/users/entities/user.entity';
 import { DeepPartial, Repository } from 'typeorm';
 import { UpdateQuestionDto } from '../dtos/updateQuestion.dto';
 import { QuestionQueryDto } from '../dtos/questionQuery.dto';
-import { UsersService } from 'src/modules/users/services/users.service';
+import { UsersService } from '@src/modules/users/services/users.service';
 
 @Injectable()
 export class QuestionsService {
+  private readonly logger = new Logger(QuestionsService.name);
+
   constructor(
     @InjectRepository(Question) private repoQuestion: Repository<Question>,
     private repoUser: UsersService,
@@ -35,6 +37,8 @@ export class QuestionsService {
         tags: `%${tags}%`,
       });
     }
+
+    this.logger.log('hello');
 
     questions
       .leftJoinAndSelect('question.user', 'user')
