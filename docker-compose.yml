@@ -2,30 +2,32 @@ version: '3.9'
 
 services:
   node_app:
+    image: siarheilabodzin/microservice1
     build:
       context: .
     env_file:
       - .env
     ports:
-      - '3000:3000'
+      - '3001:3000'
     environment:
       - DATABASE_URL=postgresql://user:Wf46svc49c6zGpPbUusqxXw8J9JM7pq9@dpg-cr1l5cdds78s739tman0-a/test_safj
       - REDIS_URL=redis://red-cr1l81bqf0us73fp46eg:6379
     depends_on:
       - postgres
-      - redis
+      - redis_data
 
   node_app2:
+    image: siarheilabodzin/microservice2
     build:
       context: .
     ports:
-      - '3001:3001'
+      - '3002:3000'
     environment:
       - DATABASE_URL=postgresql://user:Wf46svc49c6zGpPbUusqxXw8J9JM7pq9@dpg-cr1l5cdds78s739tman0-a/test_safj
       - REDIS_URL=redis://red-cr1l81bqf0us73fp46eg:6379
     depends_on:
       - postgres
-      - redis
+      - redis_data
 
   redis:
     image: redis:6.2-rc-alpine
